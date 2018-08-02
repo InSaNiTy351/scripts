@@ -16,29 +16,14 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-export sourcedir=~/android/lineage
-export outdir=~/android/lineage/out/target/product/mata
+export kerneldir=~/android/lineage/kernel/essential/msm8998
 
-echo 3 | sudo tee /proc/sys/vm/drop_caches
-
-cd $sourcedir
-echo "Building update.zip"
-. build/envsetup.sh
+cd $kerneldir
 sleep 1
-lunch lineage_mata-userdebug
+make ARCH=arm64 mata_defconfig menuconfig
 sleep 1
-cd $outdir
-rm -rf boot.img
-rm -rf system.img
-rm -rf ramdisk.img
-rm -rf *kernel*
-rm -rf *.zip
-rm -rf *.prop
-rm -rf *.md5sum
-rm -rf */.prop
-cd $sourcedir
+cp .config arch/arm64/configs/mata_defconfig
 sleep 1
-time make -j4 bacon
-echo "Build Compleated"
-cd $outdir
-ls
+make mrproper
+sleep 1 
+echo 'defconfig regeneration complete'
